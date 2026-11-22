@@ -58,6 +58,8 @@ After renaming, run `cargo check -p app-core` to refresh the workspace package n
 
 ## Build and verify
 
+With GNU Make installed, run `make help` for the available targets. Use `make web`, `make desktop`, or `make tui` for development, `make check` for the local quality checks, and `make build` for all three release outputs. The aggregate check and build targets use the desktop prerequisites.
+
 ```sh
 cargo fmt --all -- --check
 cargo test -p app-core
