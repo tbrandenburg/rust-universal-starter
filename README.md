@@ -24,7 +24,7 @@ Open [http://localhost:1420](http://localhost:1420) for web development. Tauri s
 
 ## Android and iOS
 
-Install the [Tauri mobile prerequisites](https://v2.tauri.app/start/prerequisites/#configure-for-mobile-targets) for the platform you want to build. Android needs the Android SDK and NDK. iOS needs macOS and full Xcode. Install the corresponding Rust targets as part of that setup.
+Install the [Tauri mobile prerequisites](https://v2.tauri.app/start/prerequisites/#configure-for-mobile-targets) for the platform you want to build. With the pinned Tauri CLI, Android needs SDK Platform 37.0, Android Build-Tools, and the NDK. iOS needs macOS and full Xcode. Install the corresponding Rust targets as part of that setup.
 
 Initialize each platform once from the repository root, after setting your project's Tauri bundle identifier and package names. Then run the app on an available emulator, simulator, or device.
 
