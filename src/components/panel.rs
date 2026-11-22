@@ -21,7 +21,10 @@ pub fn Panel(screen: Memo<Screen>, count: Memo<u64>, on_action: Callback<Action>
         .into_any(),
         Screen::Activity => view! {
             <ul class="panel-list">
-                <li>"Increments this session: " <strong>{move || count.get()}</strong></li>
+                <li>
+                    <span id="activity-counter-label">"Increments this session: "</span>
+                    <output aria-labelledby="activity-counter-label">{move || count.get()}</output>
+                </li>
             </ul>
         }
         .into_any(),
@@ -36,7 +39,7 @@ pub fn Panel(screen: Memo<Screen>, count: Memo<u64>, on_action: Callback<Action>
 
     view! {
         <section class="panel" aria-labelledby="screen-heading">
-            <h2 id="screen-heading">{move || screen.get().label()}</h2>
+            <h2 id="screen-heading" aria-live="polite">{move || screen.get().label()}</h2>
             {content}
         </section>
     }

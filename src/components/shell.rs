@@ -1,5 +1,5 @@
 use app_core::{Action, AppState, update};
-use leptos::{ev::KeyboardEvent, html, prelude::*};
+use leptos::{ev::KeyboardEvent, html, prelude::*, wasm_bindgen::JsCast, web_sys::Element};
 
 use super::{navigation::Navigation, panel::Panel};
 
@@ -18,6 +18,7 @@ pub fn Shell() -> impl IntoView {
             || event.meta_key()
             || event.is_composing()
             || event.repeat()
+            || is_editing(&event)
         {
             return;
         }
@@ -47,4 +48,20 @@ pub fn Shell() -> impl IntoView {
             </div>
         </main>
     }
+}
+
+// Leave native editing and selection shortcuts available to controls added to the shell.
+fn is_editing(event: &KeyboardEvent) -> bool {
+    event
+        .target()
+        .and_then(|target| target.dyn_into::<Element>().ok())
+        .and_then(|element| {
+            element
+                .closest(
+                    "input, textarea, select, [contenteditable]:not([contenteditable='false'])",
+                )
+                .ok()
+                .flatten()
+        })
+        .is_some()
 }

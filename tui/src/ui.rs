@@ -30,17 +30,18 @@ pub fn render(frame: &mut Frame, state: &AppState) {
     frame.render_widget(Paragraph::new("Rust Universal Starter").bold(), header);
     render_navigation(frame, navigation, state.screen(), wide);
     render_panel(frame, panel, state);
-    let shortcuts = if wide {
-        "1-3 Navigate   I Increment   Q Quit"
-    } else {
-        "1-3 Nav  I Inc  Q Quit"
+    let shortcuts = match area.width {
+        38.. => "1-3 Navigate   I Increment   Q Quit",
+        21.. => "1-3 Nav  I Inc  Q Quit",
+        _ => "1-3  I  Q Quit",
     };
     frame.render_widget(Paragraph::new(shortcuts), help);
 }
 
 fn render_navigation(frame: &mut Frame, area: Rect, active: Screen, wide: bool) {
     let item = |screen: Screen| {
-        let label = format!(" {} {} ", screen.shortcut(), screen.label());
+        let marker = if screen == active { '>' } else { ' ' };
+        let label = format!("{marker}{} {} ", screen.shortcut(), screen.label());
         if screen == active {
             Span::styled(label, Style::new().fg(Color::Black).bg(ACCENT).bold())
         } else {
