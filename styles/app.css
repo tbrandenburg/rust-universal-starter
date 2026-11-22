@@ -1,0 +1,156 @@
+:root {
+    color-scheme: dark;
+    --background: #101821;
+    --surface: #19242f;
+    --text: #eef4fa;
+    --muted: #b5c4d2;
+    --border: #405164;
+    --accent: #91e5d1;
+    --accent-ink: #102725;
+    --focus: #9edcff;
+    --space: 1rem;
+    font-family: system-ui, sans-serif;
+    line-height: 1.5;
+    background: var(--background);
+    color: var(--text);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+button {
+    font: inherit;
+    cursor: pointer;
+}
+
+:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 3px;
+}
+
+.shell {
+    max-inline-size: 65rem;
+    margin-inline: auto;
+    padding: clamp(1rem, 4vw, 3rem);
+}
+
+.shell:focus-visible {
+    outline-offset: -3px;
+}
+
+.shell-header {
+    margin-block-end: calc(2 * var(--space));
+}
+
+h1,
+h2 {
+    margin: 0;
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+}
+
+.shell-content {
+    display: grid;
+    grid-template-columns: 13rem minmax(0, 1fr);
+    gap: var(--space);
+}
+
+.navigation ul {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.navigation button,
+.primary-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    min-block-size: 2.75rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+}
+
+.navigation button {
+    inline-size: 100%;
+    background: var(--surface);
+    color: var(--text);
+    text-align: start;
+}
+
+.navigation button:hover {
+    border-color: var(--accent);
+}
+
+.navigation button[aria-current="page"],
+.primary-action {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-weight: 650;
+}
+
+.primary-action:hover {
+    text-decoration: underline;
+}
+
+kbd {
+    padding: 0.05em 0.35em;
+    border: 1px solid currentColor;
+    border-radius: 0.3rem;
+    font-family: ui-monospace, monospace;
+    font-size: 0.85em;
+}
+
+.panel {
+    min-block-size: 15rem;
+    padding: clamp(1rem, 3vw, 2rem);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    background: var(--surface);
+}
+
+.counter {
+    display: grid;
+    gap: 0.25rem;
+    margin-block: var(--space);
+    color: var(--muted);
+}
+
+.counter output {
+    overflow-wrap: anywhere;
+    color: var(--text);
+    font-size: 2rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 650;
+}
+
+.panel-list {
+    padding-inline-start: 1.25rem;
+}
+
+.panel-list li + li {
+    margin-block-start: 0.5rem;
+}
+
+@media (max-width: 45rem) {
+    .shell-content {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .navigation ul {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 7.5rem), 1fr));
+    }
+}
