@@ -1,0 +1,50 @@
+name: Verify mobile targets
+
+on:
+  push:
+    branches: [starter/verify-mobile-targets]
+
+permissions:
+  contents: read
+
+env:
+  CARGO_INCREMENTAL: 0
+
+jobs:
+  android:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install pinned tools
+        run: |
+          rustup target add aarch64-linux-android
+          mkdir -p "$RUNNER_TEMP/bin"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+          curl -fsSL --retry 3 https://github.com/trunk-rs/trunk/releases/download/v0.21.14/trunk-x86_64-unknown-linux-gnu.tar.gz | tar -xz -C "$RUNNER_TEMP/bin" trunk
+          curl -fsSL --retry 3 https://github.com/tauri-apps/tauri/releases/download/tauri-cli-v2.12.6/cargo-tauri-x86_64-unknown-linux-gnu.tgz | tar -xz -C "$RUNNER_TEMP/bin" cargo-tauri
+          sdkmanager "platforms;android-37" "build-tools;37.0.0"
+          echo "NDK_HOME=$ANDROID_NDK_HOME" >> "$GITHUB_ENV"
+      - name: Initialize and build a debug APK
+        run: |
+          cargo tauri android init --ci --skip-targets-install
+          make build-android ANDROID_ARGS='--ci --debug --apk --target aarch64'
+          test -n "$(find src-tauri/gen/android -name '*.apk' -print -quit)"
+  ios:
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install pinned tools
+        run: |
+          rustup target add aarch64-apple-ios aarch64-apple-ios-sim
+          mkdir -p "$RUNNER_TEMP/bin"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+          curl -fsSL --retry 3 https://github.com/trunk-rs/trunk/releases/download/v0.21.14/trunk-aarch64-apple-darwin.tar.gz | tar -xz -C "$RUNNER_TEMP/bin" trunk
+          curl -fsSL --retry 3 https://github.com/tauri-apps/tauri/releases/download/tauri-cli-v2.12.6/cargo-tauri-aarch64-apple-darwin.zip -o "$RUNNER_TEMP/cargo-tauri.zip"
+          unzip -o "$RUNNER_TEMP/cargo-tauri.zip" cargo-tauri -d "$RUNNER_TEMP/bin"
+          xcodebuild -version
+      - name: Initialize and build an unsigned iOS archive
+        run: |
+          cargo tauri ios init --ci --skip-targets-install
+          make build-ios IOS_ARGS='--ci --no-sign --archive-only --target aarch64'
