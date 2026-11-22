@@ -9,3 +9,4 @@ ignore = ["./src-tauri", "./tui"]
 [serve]
 port = 1420
 open = false
+ws_protocol = "ws"
