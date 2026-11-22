@@ -59,6 +59,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "330a5ed07fa54e4702c9d6c4174f74427fc0ef6e214bbd677ae50a5099946470"
 
 [[package]]
+name = "app-core"
+version = "0.1.0"
+
+[[package]]
 name = "async-broadcast"
 version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3618,6 +3622,7 @@ dependencies = [
 name = "rust-universal-starter-ui"
 version = "0.1.0"
 dependencies = [
+ "app-core",
  "console_error_panic_hook",
  "js-sys",
  "leptos",
@@ -5047,6 +5052,13 @@ name = "unicode-xid"
 version = "0.2.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ebc1c04c71510c7f702b52b7c350734c9ff1295c464a03335b00bb84fc54f853"
+
+[[package]]
+name = "universal-tui"
+version = "0.1.0"
+dependencies = [
+ "app-core",
+]
 
 [[package]]
 name = "url"

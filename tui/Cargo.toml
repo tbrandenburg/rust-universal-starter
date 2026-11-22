@@ -1,0 +1,7 @@
+[package]
+name = "universal-tui"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+app-core = { path = "../crates/app-core" }
