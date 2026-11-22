@@ -1,8 +1,10 @@
 [build]
-target = "./index.html"
+target = "index.html"
+dist = "dist"
+locked = true
 
 [watch]
-ignore = ["./src-tauri"]
+ignore = ["./src-tauri", "./tui"]
 
 [serve]
 port = 1420

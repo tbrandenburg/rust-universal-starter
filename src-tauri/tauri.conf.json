@@ -1,19 +1,18 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "rust-universal-starter",
+  "productName": "Rust Universal Starter",
   "version": "0.1.0",
-  "identifier": "com.agent.rust-universal-starter",
+  "identifier": "com.example.rustuniversalstarter",
   "build": {
     "beforeDevCommand": "trunk serve",
     "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "trunk build",
+    "beforeBuildCommand": "trunk build --release",
     "frontendDist": "../dist"
   },
   "app": {
-    "withGlobalTauri": true,
     "windows": [
       {
-        "title": "rust-universal-starter",
+        "title": "Rust Universal Starter",
         "width": 800,
         "height": 600
       }

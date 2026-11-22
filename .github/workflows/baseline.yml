@@ -1,4 +1,4 @@
-name: Generated starter smoke tests
+name: Browser and desktop smoke tests
 
 on:
   push:
@@ -23,7 +23,7 @@ jobs:
           sudo apt-get install -y libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev xvfb xdotool imagemagick tesseract-ocr tesseract-ocr-eng
           curl -fsSL --retry 3 https://github.com/trunk-rs/trunk/releases/download/v0.21.14/trunk-x86_64-unknown-linux-gnu.tar.gz | tar -xz -C "$HOME/.cargo/bin" trunk
           curl -fsSL --retry 3 https://github.com/tauri-apps/tauri/releases/download/tauri-cli-v2.12.6/cargo-tauri-x86_64-unknown-linux-gnu.tgz | tar -xz -C "$HOME/.cargo/bin" cargo-tauri
-      - name: Open the generated app in Chrome
+      - name: Open the app in Chrome
         run: |
           trunk serve > "$RUNNER_TEMP/trunk.log" 2>&1 &
           server=$!
@@ -32,13 +32,13 @@ jobs:
             kill -0 "$server"
             if curl -fsS http://localhost:1420/ | grep -q 'wasm'; then
               google-chrome --headless --no-sandbox --disable-gpu --virtual-time-budget=10000 --dump-dom http://localhost:1420/ > "$RUNNER_TEMP/browser.html"
-              if grep -q '<h1>Welcome to Tauri + Leptos</h1>' "$RUNNER_TEMP/browser.html"; then exit 0; fi
+              if grep -q 'Increment counter' "$RUNNER_TEMP/browser.html"; then exit 0; fi
             fi
             sleep 2
           done
           cat "$RUNNER_TEMP/browser.html"
           exit 1
-      - name: Open the generated app in Tauri
+      - name: Open the app in Tauri
         env:
           LIBGL_ALWAYS_SOFTWARE: 1
           WEBKIT_DISABLE_DMA_BUF_RENDERER: 1
@@ -49,11 +49,11 @@ jobs:
           trap 'kill "$app" 2>/dev/null || true; cat "$RUNNER_TEMP/tauri.log"' EXIT
           for attempt in {1..420}; do
             kill -0 "$app"
-            window=$(xdotool search --onlyvisible --name '^rust-universal-starter$' | head -1 || true)
+            window=$(xdotool search --onlyvisible --name '^Rust Universal Starter$' | head -1 || true)
             if [ -n "$window" ]; then
               import -window "$window" "$RUNNER_TEMP/tauri.png"
               tesseract "$RUNNER_TEMP/tauri.png" "$RUNNER_TEMP/tauri" 2>/dev/null || true
-              if grep -qi 'welcome to tauri' "$RUNNER_TEMP/tauri.txt"; then exit 0; fi
+              if grep -qi 'increment counter' "$RUNNER_TEMP/tauri.txt"; then exit 0; fi
             fi
             sleep 2
           done
@@ -63,7 +63,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: baseline-smoke-output
+          name: interface-smoke-output
           path: |
             ${{ runner.temp }}/trunk.log
             ${{ runner.temp }}/browser.html
