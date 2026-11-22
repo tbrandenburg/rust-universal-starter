@@ -22,6 +22,21 @@ The terminal app only needs Rust and an interactive terminal. For desktop, insta
 
 Open [http://localhost:1420](http://localhost:1420) for web development. Tauri starts Trunk on the same port, so stop the standalone web server before running desktop development.
 
+## Android and iOS
+
+Install the [Tauri mobile prerequisites](https://v2.tauri.app/start/prerequisites/#configure-for-mobile-targets) for the platform you want to build. Android needs the Android SDK and NDK. iOS needs macOS and full Xcode. Install the corresponding Rust targets as part of that setup.
+
+Initialize each platform once from the repository root, after setting your project's Tauri bundle identifier and package names. Then run the app on an available emulator, simulator, or device.
+
+| Platform | Initialize | Develop | Build |
+| --- | --- | --- | --- |
+| Android | `cargo tauri android init` | `make android` | `make build-android` |
+| iOS | `cargo tauri ios init` | `make ios` | `make build-ios` |
+
+Pass extra Tauri CLI options through `ANDROID_ARGS` or `IOS_ARGS`. For an Android debug APK for an x86-64 emulator, run `make build-android ANDROID_ARGS="--debug --apk --target x86_64"`. For physical devices, see the [Tauri development server notes](https://v2.tauri.app/develop/#development-server). Mobile development uses the same Trunk server on port 1420, so stop any standalone web or desktop development session first.
+
+Configure the platform's [signing credentials](https://v2.tauri.app/distribute/#signing) before distributing an Android or iOS build. The mobile targets run independently of the default `make build`.
+
 ## First run
 
 - [ ] Open Home and increment the counter.
