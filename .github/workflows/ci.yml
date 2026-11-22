@@ -24,7 +24,10 @@ jobs:
       - name: Install toolchain and Trunk
         run: |
           rustup show
-          curl -fsSL --retry 3 "https://github.com/trunk-rs/trunk/releases/download/v${TRUNK_VERSION}/trunk-x86_64-unknown-linux-gnu.tar.gz" | tar -xz -C "$HOME/.cargo/bin" trunk
+          tool_bin="$RUNNER_TEMP/rust-starter-bin"
+          mkdir -p "$tool_bin"
+          echo "$tool_bin" >> "$GITHUB_PATH"
+          curl -fsSL --retry 3 "https://github.com/trunk-rs/trunk/releases/download/v${TRUNK_VERSION}/trunk-x86_64-unknown-linux-gnu.tar.gz" | tar -xz -C "$tool_bin" trunk
       - name: Check formatting
         run: cargo fmt --all -- --check
       - name: Test and lint the shared core
@@ -80,13 +83,16 @@ jobs:
         if: runner.os != 'Windows'
         shell: bash
         run: |
-          curl -fsSL --retry 3 "https://github.com/trunk-rs/trunk/releases/download/v${TRUNK_VERSION}/trunk-${TOOL_TARGET}.tar.gz" | tar -xz -C "$HOME/.cargo/bin" trunk
+          tool_bin="$RUNNER_TEMP/rust-starter-bin"
+          mkdir -p "$tool_bin"
+          echo "$tool_bin" >> "$GITHUB_PATH"
+          curl -fsSL --retry 3 "https://github.com/trunk-rs/trunk/releases/download/v${TRUNK_VERSION}/trunk-${TOOL_TARGET}.tar.gz" | tar -xz -C "$tool_bin" trunk
           if [[ "$RUNNER_OS" == "Linux" ]]; then
-            curl -fsSL --retry 3 "https://github.com/tauri-apps/tauri/releases/download/tauri-cli-v${TAURI_CLI_VERSION}/cargo-tauri-${TOOL_TARGET}.tgz" | tar -xz -C "$HOME/.cargo/bin" cargo-tauri
+            curl -fsSL --retry 3 "https://github.com/tauri-apps/tauri/releases/download/tauri-cli-v${TAURI_CLI_VERSION}/cargo-tauri-${TOOL_TARGET}.tgz" | tar -xz -C "$tool_bin" cargo-tauri
           else
             archive="$RUNNER_TEMP/cargo-tauri.zip"
             curl -fsSL --retry 3 "https://github.com/tauri-apps/tauri/releases/download/tauri-cli-v${TAURI_CLI_VERSION}/cargo-tauri-${TOOL_TARGET}.zip" -o "$archive"
-            unzip -o "$archive" cargo-tauri -d "$HOME/.cargo/bin"
+            unzip -o "$archive" cargo-tauri -d "$tool_bin"
           fi
       - name: Install Trunk and Tauri CLI on Windows
         if: runner.os == 'Windows'
